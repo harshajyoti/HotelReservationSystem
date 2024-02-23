@@ -66,6 +66,43 @@ public class HotelReservationSystem {
         }
     }
 
+    public void bestRatedHotel(){
+        int lakewoodHotelPrice = 0;
+        int bridgewoodHotelPrice = 0;
+        int ridgewoodHotelPrice = 0;
+
+        Hotel lakewoodHotel = hotels.get("Lakewood");
+        Hotel bridgewoodHotel = hotels.get("Bridgewood");
+        Hotel ridgewoodHotel = hotels.get("Ridgewood");
+        if (lakewoodHotel.getRatings() > bridgewoodHotel.getRatings() && ridgewoodHotel.getRatings() < lakewoodHotel.getRatings()){
+            for (String day : days){
+                if (isWeekday(day)){
+                    lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
+                } else {
+                    lakewoodHotelPrice += lakewoodHotel.getWeekendRegularRate();
+                }
+            }
+            System.out.println(lakewoodHotel.getName() + " & Total Rate $ " + lakewoodHotelPrice);
+        } else if (bridgewoodHotel.getRatings() > lakewoodHotel.getRatings() && ridgewoodHotel.getRatings() < bridgewoodHotel.getRatings()){
+            for (String day : days){
+                if (isWeekday(day)){
+                    bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRegularRate();
+                } else {
+                    bridgewoodHotelPrice += bridgewoodHotel.getWeekendRegularRate();
+                }
+            }
+            System.out.println(bridgewoodHotel.getName() + " & Total Rate $ " + bridgewoodHotelPrice);
+        } else {
+            for (String day : days){
+                if (isWeekday(day)){
+                    ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRegularRate();
+                } else {
+                    ridgewoodHotelPrice += ridgewoodHotel.getWeekendRegularRate();
+                }
+            }
+            System.out.println(ridgewoodHotel.getName() + " & Total Rate $ " + ridgewoodHotelPrice);
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -81,6 +118,7 @@ public class HotelReservationSystem {
 
         reservationSystem.acceptInput();
         reservationSystem.findCheapHotel();
+        reservationSystem.bestRatedHotel();
     }
 
 }
