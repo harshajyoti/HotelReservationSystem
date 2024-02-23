@@ -76,7 +76,6 @@ public class HotelReservationSystem {
 
         reservationSystem.acceptInput();
         reservationSystem.findCheapHotel();
-
     }
 
 }
