@@ -6,11 +6,13 @@ public class Hotel {
     // Added Weekday and weekend regular price
     int weekdayRegularRate;
     int WeekendRegularRate;
+    int ratings;
 
-    public Hotel(String name, int weekdayRegularRate, int WeekendRegularRate) {
+    public Hotel(String name, int weekdayRegularRate, int WeekendRegularRate, int ratings) {
         this.name = name;
         this.weekdayRegularRate = weekdayRegularRate;
         this.WeekendRegularRate = WeekendRegularRate;
+        this.ratings = ratings;
     }
 
     public String getName() {
@@ -23,6 +25,10 @@ public class Hotel {
 
     public int getWeekendRegularRate() {
         return WeekendRegularRate;
+    }
+
+    public int getRatings() {
+        return ratings;
     }
 
     @Override

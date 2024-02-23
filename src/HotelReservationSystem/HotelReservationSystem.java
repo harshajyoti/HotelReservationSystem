@@ -9,8 +9,8 @@ public class HotelReservationSystem {
     HashMap<String, Hotel> hotels = new HashMap<>();
     ArrayList<String> days = new ArrayList<>();
 
-    public void addHotel(String name, int weekdayRegularRate, int weekendRegularRate){
-        hotels.put(name, new Hotel(name, weekdayRegularRate, weekendRegularRate));
+    public void addHotel(String name, int weekdayRegularRate, int weekendRegularRate, int ratings){
+        hotels.put(name, new Hotel(name, weekdayRegularRate, weekendRegularRate, ratings));
     }
 
     // Method to accept input from the User.
@@ -66,9 +66,9 @@ public class HotelReservationSystem {
 
         HotelReservationSystem reservationSystem = new HotelReservationSystem();
 
-        reservationSystem.addHotel("Lakewood", 110, 90);
-        reservationSystem.addHotel("Bridgewood", 160, 60);
-        reservationSystem.addHotel("Ridgewood", 220, 150);
+        reservationSystem.addHotel("Lakewood", 110, 90, 3);
+        reservationSystem.addHotel("Bridgewood", 160, 60, 4);
+        reservationSystem.addHotel("Ridgewood", 220, 150, 5);
 
         Hotel lakewoodHotel = reservationSystem.hotels.get("Lakewood");
         Hotel bridgewoodHotel = reservationSystem.hotels.get("Bridgewood");
