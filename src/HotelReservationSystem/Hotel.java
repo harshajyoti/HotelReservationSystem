@@ -5,13 +5,17 @@ public class Hotel {
     String name;
     // Added Weekday and weekend regular price
     int weekdayRegularRate;
-    int WeekendRegularRate;
+    int weekendRegularRate;
+    int weekdayRewardRate;
+    int weekendRewardRate;
     int ratings;
 
-    public Hotel(String name, int weekdayRegularRate, int WeekendRegularRate, int ratings) {
+    public Hotel(String name, int weekdayRegularRate, int weekendRegularRate, int weekdayRewardRate, int weekendRewardRate, int ratings) {
         this.name = name;
         this.weekdayRegularRate = weekdayRegularRate;
-        this.WeekendRegularRate = WeekendRegularRate;
+        this.weekendRegularRate = weekendRegularRate;
+        this.weekdayRewardRate = weekdayRewardRate;
+        this.weekendRewardRate = weekendRewardRate;
         this.ratings = ratings;
     }
 
@@ -24,17 +28,18 @@ public class Hotel {
     }
 
     public int getWeekendRegularRate() {
-        return WeekendRegularRate;
+        return weekendRegularRate;
+    }
+
+    public int getWeekdayRewardRate() {
+        return weekdayRewardRate;
+    }
+
+    public int getWeekendRewardRate() {
+        return weekendRewardRate;
     }
 
     public int getRatings() {
         return ratings;
-    }
-
-    @Override
-    public String toString(){
-        return "Hotel: " + name + "\n"
-                + "regular rate in weekday: " + weekdayRegularRate + "\n"
-                + "regular rate in weekday: " + WeekendRegularRate;
     }
 }
