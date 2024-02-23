@@ -38,6 +38,7 @@ public class HotelReservationSystem {
         Hotel lakewoodHotel = hotels.get("Lakewood");
         Hotel bridgewoodHotel = hotels.get("Bridgewood");
         Hotel ridgewoodHotel = hotels.get("Ridgewood");
+        // Able to find cheap hotel for a given date range based on weekday or weekend
         for (String day : days){
             if (day.equals("mon")  || day.equals("tue") || day.equals("wed") || day.equals("thur") || day.equals("fri")){
                 lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
