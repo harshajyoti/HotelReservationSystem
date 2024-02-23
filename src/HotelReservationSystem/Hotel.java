@@ -12,6 +12,18 @@ public class Hotel {
         this.WeekendRegularRate = WeekendRegularRate;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getWeekdayRegularRate() {
+        return weekdayRegularRate;
+    }
+
+    public int getWeekendRegularRate() {
+        return WeekendRegularRate;
+    }
+
     @Override
     public String toString(){
         return "Hotel: " + name + "\n"
