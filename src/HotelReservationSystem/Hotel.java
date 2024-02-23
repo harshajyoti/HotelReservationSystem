@@ -3,6 +3,7 @@ package HotelReservationSystem;
 public class Hotel {
 
     String name;
+    // Added Weekday and weekend regular price
     int weekdayRegularRate;
     int WeekendRegularRate;
 
