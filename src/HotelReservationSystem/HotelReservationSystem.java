@@ -1,8 +1,10 @@
 package HotelReservationSystem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 public class HotelReservationSystem {
 
@@ -15,15 +17,23 @@ public class HotelReservationSystem {
     }
 
     public void validateInput(String dateRange) throws IllegalArgumentException {
-        String[] dateStrings = dateRange.split(", ");
-        for (String dateString : dateStrings) {
-            if (dateString.matches("\\d{1,2}[A-Za-z]{3}\\d{4}\\(\\w+\\)")) {
-                String dayOfWeek = dateString.substring(dateString.indexOf('(') + 1, dateString.indexOf(')'));
-                days.add(dayOfWeek);
-            } else {
-                throw new IllegalArgumentException("Invalid Date format: " + dateString);
-            }
-        }
+        Arrays.stream(dateRange.split(", "))
+                .map(dateString -> {
+                    try {
+                        return dateString.substring(0, 3).toUpperCase() + dateString.substring(3);
+                    } catch (IndexOutOfBoundsException e) {
+                        throw new IllegalArgumentException("Invalid Date format: " + dateString);
+                    }
+                })
+                .forEach(dateString -> {
+                    try {
+                        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("ddMMMuuuu", Locale.ENGLISH));
+                        DayOfWeek dayOfWeek = date.getDayOfWeek();
+                        days.add(dayOfWeek.toString().substring(0, 3).toLowerCase());
+                    } catch (DateTimeParseException | IndexOutOfBoundsException e) {
+                        throw new IllegalArgumentException("Invalid Date format: " + dateString);
+                    }
+                });
     }
 
     // Method to accept input from the User.
@@ -38,7 +48,7 @@ public class HotelReservationSystem {
 
     private boolean isWeekday(String day) {
         return day.equalsIgnoreCase("mon") || day.equalsIgnoreCase("tue") || day.equalsIgnoreCase("wed")
-                || day.equalsIgnoreCase("thur") || day.equalsIgnoreCase("fri");
+                || day.equalsIgnoreCase("thu") || day.equalsIgnoreCase("fri");
     }
 
     // Method to find the cheapest hotel rate
