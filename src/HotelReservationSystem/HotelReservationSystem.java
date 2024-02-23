@@ -7,26 +7,33 @@ import java.util.Scanner;
 public class HotelReservationSystem {
 
     HashMap<String, Hotel> hotels = new HashMap<>();
+    String userType;
     ArrayList<String> days = new ArrayList<>();
 
     public void addHotel(String name, int weekdayRegularRate, int weekendRegularRate, int weekdayRewardRate, int weekendRewardRate, int ratings){
         hotels.put(name, new Hotel(name, weekdayRegularRate, weekendRegularRate, weekdayRewardRate, weekendRewardRate, ratings));
     }
 
+    public void validateInput(String dateRange) throws IllegalArgumentException {
+        String[] dateStrings = dateRange.split(", ");
+        for (String dateString : dateStrings) {
+            if (dateString.matches("\\d{1,2}[A-Za-z]{3}\\d{4}\\(\\w+\\)")) {
+                String dayOfWeek = dateString.substring(dateString.indexOf('(') + 1, dateString.indexOf(')'));
+                days.add(dayOfWeek);
+            } else {
+                throw new IllegalArgumentException("Invalid Date format: " + dateString);
+            }
+        }
+    }
+
     // Method to accept input from the User.
     public void acceptInput(){
         Scanner scan = new Scanner(System.in);
+        System.out.print("Please Enter Customer type: ");
+        userType = scan.nextLine();
         System.out.print("Please Enter Date range: ");
         String userInput = scan.nextLine();
-        // example - 10Sep2020(wed), 11Sep2020(thur)
-        String[] dateStrings = userInput.split(", ");
-        for (String dateString : dateStrings) {
-            String dayOfWeek = dateString.substring(dateString.indexOf('(') + 1, dateString.indexOf(')'));
-            days.add(dayOfWeek);
-        }
-        for (String day : days){
-            System.out.println(day);
-        }
+        validateInput(userInput);
     }
 
     private boolean isWeekday(String day) {
@@ -38,21 +45,37 @@ public class HotelReservationSystem {
     public void findCheapHotel(){
         int lakewoodHotelPrice = 0;
         int bridgewoodHotelPrice = 0;
+
         int ridgewoodHotelPrice = 0;
 
         Hotel lakewoodHotel = hotels.get("Lakewood");
         Hotel bridgewoodHotel = hotels.get("Bridgewood");
         Hotel ridgewoodHotel = hotels.get("Ridgewood");
         // Able to find cheap hotel for a given date range based on weekday or weekend
-        for (String day : days){
-            if (isWeekday(day)){
-                lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
-                bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRegularRate();
-                ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRegularRate();
-            } else {
-                lakewoodHotelPrice += lakewoodHotel.getWeekendRegularRate();
-                bridgewoodHotelPrice += bridgewoodHotel.getWeekendRegularRate();
-                ridgewoodHotelPrice += ridgewoodHotel.getWeekendRegularRate();
+
+        if (userType.equalsIgnoreCase("regular")){
+            for (String day : days){
+                if (isWeekday(day)){
+                    lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
+                    bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRegularRate();
+                    ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRegularRate();
+                } else {
+                    lakewoodHotelPrice += lakewoodHotel.getWeekendRegularRate();
+                    bridgewoodHotelPrice += bridgewoodHotel.getWeekendRegularRate();
+                    ridgewoodHotelPrice += ridgewoodHotel.getWeekendRegularRate();
+                }
+            }
+        } else {
+            for (String day : days){
+                if (isWeekday(day)){
+                    lakewoodHotelPrice += lakewoodHotel.getWeekdayRewardRate();
+                    bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRewardRate();
+                    ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRewardRate();
+                } else {
+                    lakewoodHotelPrice += lakewoodHotel.getWeekendRewardRate();
+                    bridgewoodHotelPrice += bridgewoodHotel.getWeekendRewardRate();
+                    ridgewoodHotelPrice += ridgewoodHotel.getWeekendRewardRate();
+                }
             }
         }
 
