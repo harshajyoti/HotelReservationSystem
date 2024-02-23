@@ -29,6 +29,11 @@ public class HotelReservationSystem {
         }
     }
 
+    private boolean isWeekday(String day) {
+        return day.equalsIgnoreCase("mon") || day.equalsIgnoreCase("tue") || day.equalsIgnoreCase("wed")
+                || day.equalsIgnoreCase("thur") || day.equalsIgnoreCase("fri");
+    }
+
     // Method to find the cheapest hotel rate
     public void findCheapHotel(){
         int lakewoodHotelPrice = 0;
@@ -40,7 +45,7 @@ public class HotelReservationSystem {
         Hotel ridgewoodHotel = hotels.get("Ridgewood");
         // Able to find cheap hotel for a given date range based on weekday or weekend
         for (String day : days){
-            if (day.equals("mon")  || day.equals("tue") || day.equals("wed") || day.equals("thur") || day.equals("fri")){
+            if (isWeekday(day)){
                 lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
                 bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRegularRate();
                 ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRegularRate();
@@ -59,8 +64,8 @@ public class HotelReservationSystem {
         } else {
             System.out.println(ridgewoodHotel.getName() + ", Total Rate: $" + ridgewoodHotelPrice);
         }
-
     }
+
 
     public static void main(String[] args) {
 
