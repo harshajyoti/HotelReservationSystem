@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HotelReservationSystem {
 
@@ -52,88 +53,73 @@ public class HotelReservationSystem {
     }
 
     // Method to find the cheapest hotel rate
-    public void findCheapHotel(){
-        int lakewoodHotelPrice = 0;
-        int bridgewoodHotelPrice = 0;
-
-        int ridgewoodHotelPrice = 0;
-
+    public void findCheapHotel() {
         Hotel lakewoodHotel = hotels.get("Lakewood");
         Hotel bridgewoodHotel = hotels.get("Bridgewood");
         Hotel ridgewoodHotel = hotels.get("Ridgewood");
-        // Able to find cheap hotel for a given date range based on weekday or weekend
 
-        if (userType.equalsIgnoreCase("regular")){
-            for (String day : days){
-                if (isWeekday(day)){
-                    lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
-                    bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRegularRate();
-                    ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRegularRate();
-                } else {
-                    lakewoodHotelPrice += lakewoodHotel.getWeekendRegularRate();
-                    bridgewoodHotelPrice += bridgewoodHotel.getWeekendRegularRate();
-                    ridgewoodHotelPrice += ridgewoodHotel.getWeekendRegularRate();
-                }
-            }
-        } else {
-            for (String day : days){
-                if (isWeekday(day)){
-                    lakewoodHotelPrice += lakewoodHotel.getWeekdayRewardRate();
-                    bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRewardRate();
-                    ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRewardRate();
-                } else {
-                    lakewoodHotelPrice += lakewoodHotel.getWeekendRewardRate();
-                    bridgewoodHotelPrice += bridgewoodHotel.getWeekendRewardRate();
-                    ridgewoodHotelPrice += ridgewoodHotel.getWeekendRewardRate();
-                }
-            }
-        }
+        int lakewoodHotelPrice = days.stream()
+                .mapToInt(day -> isWeekday(day) ?
+                        (userType.equalsIgnoreCase("regular") ? lakewoodHotel.getWeekdayRegularRate() : lakewoodHotel.getWeekdayRewardRate()) :
+                        (userType.equalsIgnoreCase("regular") ? lakewoodHotel.getWeekendRegularRate() : lakewoodHotel.getWeekendRewardRate()))
+                .sum();
 
-        // Compare the rates and give the cheap rate
-        if (lakewoodHotelPrice < bridgewoodHotelPrice && ridgewoodHotelPrice > lakewoodHotelPrice){
-            System.out.println(lakewoodHotel.getName() + ", Total Rate: $" + lakewoodHotelPrice);
-        } else if (bridgewoodHotelPrice < lakewoodHotelPrice && ridgewoodHotelPrice > bridgewoodHotelPrice){
-            System.out.println(bridgewoodHotel.getName() + ", Total Rate: $" + bridgewoodHotelPrice);
-        } else {
-            System.out.println(ridgewoodHotel.getName() + ", Total Rate: $" + ridgewoodHotelPrice);
-        }
+        int bridgewoodHotelPrice = days.stream()
+                .mapToInt(day -> isWeekday(day) ?
+                        (userType.equalsIgnoreCase("regular") ? bridgewoodHotel.getWeekdayRegularRate() : bridgewoodHotel.getWeekdayRewardRate()) :
+                        (userType.equalsIgnoreCase("regular") ? bridgewoodHotel.getWeekendRegularRate() : bridgewoodHotel.getWeekendRewardRate()))
+                .sum();
+
+        int ridgewoodHotelPrice = days.stream()
+                .mapToInt(day -> isWeekday(day) ?
+                        (userType.equalsIgnoreCase("regular") ? ridgewoodHotel.getWeekdayRegularRate() : ridgewoodHotel.getWeekdayRewardRate()) :
+                        (userType.equalsIgnoreCase("regular") ? ridgewoodHotel.getWeekendRegularRate() : ridgewoodHotel.getWeekendRewardRate()))
+                .sum();
+
+        Map<Integer, String> hotelPrices = new HashMap<>();
+        hotelPrices.put(lakewoodHotelPrice, lakewoodHotel.getName());
+        hotelPrices.put(bridgewoodHotelPrice, bridgewoodHotel.getName());
+        hotelPrices.put(ridgewoodHotelPrice, ridgewoodHotel.getName());
+
+        int cheapestPrice = hotelPrices.keySet().stream().min(Integer::compareTo).orElse(0);
+        String cheapestHotelName = hotelPrices.get(cheapestPrice);
+
+        System.out.println(cheapestHotelName + ", Total Rate: $" + cheapestPrice);
     }
 
-    public void bestRatedHotel(){
-        int lakewoodHotelPrice = 0;
-        int bridgewoodHotelPrice = 0;
-        int ridgewoodHotelPrice = 0;
+    public void bestRatedHotel() {
+        Map<String, Hotel> hotelsMap = new HashMap<>();
+        hotelsMap.put("Lakewood", hotels.get("Lakewood"));
+        hotelsMap.put("Bridgewood", hotels.get("Bridgewood"));
+        hotelsMap.put("Ridgewood", hotels.get("Ridgewood"));
 
-        Hotel lakewoodHotel = hotels.get("Lakewood");
-        Hotel bridgewoodHotel = hotels.get("Bridgewood");
-        Hotel ridgewoodHotel = hotels.get("Ridgewood");
-        if (lakewoodHotel.getRatings() > bridgewoodHotel.getRatings() && ridgewoodHotel.getRatings() < lakewoodHotel.getRatings()){
-            for (String day : days){
-                if (isWeekday(day)){
-                    lakewoodHotelPrice += lakewoodHotel.getWeekdayRegularRate();
-                } else {
-                    lakewoodHotelPrice += lakewoodHotel.getWeekendRegularRate();
-                }
-            }
-            System.out.println(lakewoodHotel.getName() + " & Total Rate $ " + lakewoodHotelPrice);
-        } else if (bridgewoodHotel.getRatings() > lakewoodHotel.getRatings() && ridgewoodHotel.getRatings() < bridgewoodHotel.getRatings()){
-            for (String day : days){
-                if (isWeekday(day)){
-                    bridgewoodHotelPrice += bridgewoodHotel.getWeekdayRegularRate();
-                } else {
-                    bridgewoodHotelPrice += bridgewoodHotel.getWeekendRegularRate();
-                }
-            }
-            System.out.println(bridgewoodHotel.getName() + " & Total Rate $ " + bridgewoodHotelPrice);
-        } else {
-            for (String day : days){
-                if (isWeekday(day)){
-                    ridgewoodHotelPrice += ridgewoodHotel.getWeekdayRegularRate();
-                } else {
-                    ridgewoodHotelPrice += ridgewoodHotel.getWeekendRegularRate();
-                }
-            }
-            System.out.println(ridgewoodHotel.getName() + " & Total Rate $ " + ridgewoodHotelPrice);
+        Map<Hotel, Integer> hotelPrices = hotelsMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getValue,
+                        entry -> {
+                            Hotel hotel = entry.getValue();
+                            int totalPrice = 0;
+                            for (String day : days) {
+                                if (isWeekday(day)) {
+                                    totalPrice += userType.equalsIgnoreCase("regular") ? hotel.getWeekdayRegularRate() : hotel.getWeekdayRewardRate();
+                                } else {
+                                    totalPrice += userType.equalsIgnoreCase("regular") ? hotel.getWeekendRegularRate() : hotel.getWeekendRewardRate();
+                                }
+                            }
+                            return totalPrice;
+                        },
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
+                ));
+
+        Hotel bestRatedHotel = hotelPrices.entrySet().stream()
+                .max(Map.Entry.comparingByKey(Comparator.comparing(Hotel::getRatings)))
+                .map(Map.Entry::getKey)
+                .orElse(null);
+
+        if (bestRatedHotel != null) {
+            int bestRatedHotelPrice = hotelPrices.get(bestRatedHotel);
+            System.out.println(bestRatedHotel.getName() + " & Total Rate $ " + bestRatedHotelPrice);
         }
     }
 
@@ -144,10 +130,6 @@ public class HotelReservationSystem {
         reservationSystem.addHotel("Lakewood", 110, 90, 80, 80, 3);
         reservationSystem.addHotel("Bridgewood", 160, 60, 110, 50, 4);
         reservationSystem.addHotel("Ridgewood", 220, 150, 100, 40, 5);
-
-        Hotel lakewoodHotel = reservationSystem.hotels.get("Lakewood");
-        Hotel bridgewoodHotel = reservationSystem.hotels.get("Bridgewood");
-        Hotel ridgewoodHotel = reservationSystem.hotels.get("Ridgewood");
 
         reservationSystem.acceptInput();
         reservationSystem.findCheapHotel();
